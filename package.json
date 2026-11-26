@@ -1,0 +1,3 @@
+{ "name": "mawaqeet-web", "version": "1.0.0", "private": true, "type": "module",
+  "scripts": { "build": "node build-data.mjs" },
+  "dependencies": { "@fontsource/cairo": "^5.0.0", "adhan": "^4.4.3" } }
