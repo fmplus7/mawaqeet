@@ -110,14 +110,23 @@ export async function buildQuran() {
 }
 
 export async function copyAssets() {
-  let dir; try { dir = path.dirname(require.resolve('@fontsource/cairo/package.json')); } catch { console.warn('⚠️ شغّل npm install أولاً'); return; }
+  const nm = path.resolve('node_modules');
+  // الخطوط (Cairo) من حزمة fontsource
+  const fdir = `${nm}/@fontsource/cairo/files`;
+  let nf = 0;
   for (const w of [300, 400, 500, 600, 700, 800]) for (const sub of ['arabic', 'latin']) {
-    const f = `cairo-${sub}-${w}-normal.woff2`, src = `${dir}/files/${f}`;
-    if (existsSync(src)) await copyFile(src, `${OUT}/fonts/${f}`); else console.warn('  غير موجود:', f);
+    const f = `cairo-${sub}-${w}-normal.woff2`;
+    if (existsSync(`${fdir}/${f}`)) { await copyFile(`${fdir}/${f}`, `${OUT}/fonts/${f}`); nf++; }
   }
-  try { await copyFile(`${path.dirname(require.resolve('adhan/package.json'))}/lib/bundles/adhan.umd.min.js`, `${OUT}/vendor/adhan.umd.min.js`); }
-  catch { console.warn('⚠️ لم أجد adhan في node_modules'); }
-  console.log('✅ الخطوط ومكتبة الحساب');
+  console.log(`✅ خطوط Cairo: ${nf} ملف`);
+  // مكتبة الحساب: من node_modules، وإلا من الإنترنت
+  const dest = `${OUT}/vendor/adhan.umd.min.js`, local = `${nm}/adhan/lib/bundles/adhan.umd.min.js`;
+  if (existsSync(local)) { await copyFile(local, dest); console.log('✅ مكتبة adhan (محلية)'); }
+  else {
+    console.warn('⚠️ adhan غير موجودة في node_modules، سأنزّلها من الإنترنت');
+    await writeFile(dest, await buf('https://cdn.jsdelivr.net/npm/adhan@4.4.3/lib/bundles/adhan.umd.min.js'));
+    console.log('✅ مكتبة adhan (منزّلة)');
+  }
 }
 
 export async function copyStatic() {
@@ -132,6 +141,7 @@ async function main() {
   const flat = !existsSync('www'), safe = async (f) => { try { await f(); } catch (e) { if (!flat) throw e; console.warn('⚠️ تخطّيت جزءاً:', e.message); } };
   if (flat) await copyStatic();
   if (!t || t === 'assets') await copyAssets();
+  console.log('محتويات مجلد', OUT, ':'); for (const d of ['', '/data', '/fonts', '/vendor']) { try { console.log(' ', d || '/', (await import('node:fs')).readdirSync(OUT + d).join(' ')); } catch {} }
   if (!t || t === 'cities') await safe(buildCities);
   if (!t || t === 'quran') await safe(buildQuran);
   console.log('\n🎉 تمّ. شغّل:  npm run serve');
