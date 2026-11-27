@@ -83,28 +83,26 @@ export async function buildQuran() {
   const chj = await (await get('https://api.quran.com/api/v4/chapters?language=ar')).json();
   const chapters = chj.chapters.map(c => [c.id, c.name_arabic, c.verses_count, c.pages ? c.pages[0] : 0, c.revelation_place, (c.bismillah_pre ?? (c.id !== 1 && c.id !== 9)) ? 1 : 0]);
 
-  console.log('⏳ تنزيل تقسيم صفحات مصحف المدينة (604 صفحة)…');
-  const pages = [null], juz = []; let mismatch = 0, curJuz = 0;
+  console.log('⏳ تنزيل صفحات مصحف المدينة (604 صفحة، حروف خطوط المجمع QCF)…');
+  const pages = [null], juz = [], verses = []; let curJuz = 0;
   for (let p = 1; p <= 604; p++) {
-    const j = await (await get(`https://api.quran.com/api/v4/verses/by_page/${p}?words=true&word_fields=text_uthmani,line_number&fields=verse_key&per_page=50`)).json();
+    const j = await (await get(`https://api.quran.com/api/v4/verses/by_page/${p}?words=true&word_fields=code_v1,line_number,text_uthmani&fields=verse_key&per_page=50`)).json();
     const lines = new Map(), starts = [];
     for (const v of j.verses) {
       const [s, a] = v.verse_key.split(':').map(Number);
-      const ws = v.words.filter(w => w.char_type_name !== 'end');
-      if (!ws.length || ws[0].line_number == null) throw new Error(`صفحة ${p}: لا توجد أرقام أسطر في استجابة API`);
-      const cw = text[v.verse_key] ? text[v.verse_key].split(/\s+/).filter(Boolean) : null;
-      const same = cw && cw.length === ws.length; if (cw && !same) mismatch++;
-      ws.forEach((w, i) => { if (!lines.has(w.line_number)) lines.set(w.line_number, [w.line_number]); lines.get(w.line_number).push(same ? cw[i] : w.text_uthmani); });
-      lines.get(ws[ws.length - 1].line_number).push(a);
+      const ws = v.words;
+      if (!ws.length || ws[0].line_number == null || !ws[0].code_v1) throw new Error(`صفحة ${p}: حقول code_v1/line_number غير موجودة في استجابة API`);
+      for (const w of ws) { if (!lines.has(w.line_number)) lines.set(w.line_number, [w.line_number]); lines.get(w.line_number).push(w.code_v1); }
       if (a === 1) starts.push([ws[0].line_number, s]);
+      const plain = text[v.verse_key] || ws.filter(w => w.char_type_name !== 'end').map(w => w.text_uthmani).join(' ');
+      verses.push([s, a, (ws[0].page_number || p), plain]);
       if (v.juz_number && v.juz_number !== curJuz) { curJuz = v.juz_number; juz[curJuz - 1] = p; }
     }
     pages.push([[...lines.values()].sort((x, y) => x[0] - y[0]), starts]);
     if (p % 50 === 0) console.log(`   ${p}/604`);
     await sleep(120);
   }
-  if (mismatch) console.warn(`ℹ️ ${mismatch} آية اختلف فيها عدد الكلمات بين المصدرين؛ استُخدم نص الصفحة لها.`);
-  const q = { basmala: text['1:1'], chapters, juz, pages };
+  const q = { v: 2, basmala: text['1:1'], chapters, juz, pages, verses };
   await writeFile(`${OUT}/data/quran.json`, JSON.stringify(q));
   console.log('✅ quran.json');
 }
