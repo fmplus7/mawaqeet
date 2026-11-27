@@ -153,7 +153,20 @@ h1{font-weight:800;letter-spacing:-.2px}.hb{font-weight:600}
 .sheet>div{border-top:1px solid var(--line)}
 @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}.sk .mid2 .nm2{animation:fl 6s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.sk .mid2 .nm2{animation:none}}
-.mp .fb{font-family:Hafs,'Geeza Pro',serif;font-size:22px;line-height:2.2;text-align:justify;direction:rtl;color:#1c2a24}.mp.n .fb{color:#e8e2cf}.mp .ln span{display:block}.trk .row2:last-child{border-bottom:0}</style>
+.mp .fb{font-family:Hafs,'Geeza Pro',serif;font-size:22px;line-height:2.2;text-align:justify;direction:rtl;color:#1c2a24}.mp.n .fb{color:#e8e2cf}.mp .ln span{display:block}.trk .row2:last-child{border-bottom:0}
+.dh{display:flex;align-items:center;gap:14px;margin:2px 2px 16px}
+.dh .db{width:64px;height:68px;border-radius:19px;background:linear-gradient(160deg,var(--dk1),#1f6a54);color:#f5eedb;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 14px 26px -14px var(--dk1);position:relative;overflow:hidden;flex:none}
+.dh .db::before{content:"";position:absolute;top:0;left:0;right:0;height:17px;background:rgba(0,0,0,.28)}
+.dh .db b{font-size:27px;font-weight:800;line-height:1;margin-top:11px}.dh .db small{font-size:11px;opacity:.85;margin-top:2px}
+.dh .dw{font-size:28px;font-weight:800;line-height:1.2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dh .dg{color:var(--gold);font-weight:700;font-size:15.5px;margin-top:3px}.dh .dm{color:var(--mute);font-size:13px;margin-top:1px}
+.dh .dw i{font-style:normal;font-size:12px;font-weight:700;padding:4px 11px;border-radius:14px;background:linear-gradient(135deg,#f0d891,#c9a24d);color:#10241f;display:inline-flex;align-items:center;gap:5px;box-shadow:0 8px 16px -10px #c9a24d}.dh .dw i svg.i{width:15px;height:15px}
+.dh.fr .db{background:linear-gradient(160deg,#d9b45b,#8a6a1f)}
+.nm2.lg{font-size:40px}
+.ad2.gold{background:linear-gradient(135deg,#f0d891,#c9a24d);color:#10241f;font-weight:700}
+.r.fri{border-color:var(--gold2);background:linear-gradient(135deg,var(--card),var(--hi));box-shadow:0 12px 26px -18px #c9a24d}.r.fri .n b{color:var(--gold)}.r.fri.nx{background:var(--hi)}
+.cal .c.fj{border-color:var(--gold2)}
+</style>
 </head>
 <body>
 <main id="app"></main>
@@ -253,7 +266,7 @@ function setLoc(l,keep,auto){st.loc=l;TZ=l.tz;s('loc',JSON.stringify(l));if(!kee
 const locFrom=c=>({n:c[0]||c[1],la:c[3],lo:c[4],tz:c[5],cc:c[2]});
 function search(q){const n=nrm(q.trim());if(!DB||n.length<2)return[];const a=[],b=[];for(const c of DB){const i=c[7].indexOf(n);if(i===0||c[7].includes(' '+n))a.push(c);else if(i>0)b.push(c)}const f=x=>x.sort((p,q)=>q[6]-p[6]);return [...f(a),...f(b)].slice(0,40)}
 const NATIVE=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());let _nt=0;
-function notif(){if(!NATIVE||!st.notif||!window.adhan)return;clearTimeout(_nt);_nt=setTimeout(async()=>{const LN=Capacitor.Plugins.LocalNotifications;try{const pr=await LN.requestPermissions();if(pr.display!=='granted')return;const pend=await LN.getPending();if(pend.notifications.length)await LN.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});const list=[];let id=1;for(let k=0;k<7;k++)for(const x of day(civil(k))){if(!x[3]||x[2]<=new Date()||st.pn[x[0]]===false)continue;list.push({id:id++,title:`حان وقت صلاة ${x[1]}`,body:`${PN()} · ${t12(x[2])}`,schedule:{at:x[2],allowWhileIdle:true}})}if(list.length)await LN.schedule({notifications:list})}catch(e){}},800)}
+function notif(){if(!NATIVE||!st.notif||!window.adhan)return;clearTimeout(_nt);_nt=setTimeout(async()=>{const LN=Capacitor.Plugins.LocalNotifications;try{const pr=await LN.requestPermissions();if(pr.display!=='granted')return;const pend=await LN.getPending();if(pend.notifications.length)await LN.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});const list=[];let id=1;for(let k=0;k<7;k++)for(const x of day(civil(k))){if(!x[3]||x[2]<=new Date()||st.pn[x[0]]===false)continue;list.push({id:id++,title:x[1].startsWith('صلاة')?`حان وقت ${x[1]}`:`حان وقت صلاة ${x[1]}`,body:`${PN()} · ${t12(x[2])}`,schedule:{at:x[2],allowWhileIdle:true}})}if(list.length)await LN.schedule({notifications:list})}catch(e){}},800)}
 function qgo(p){st.qp=Math.max(1,Math.min(604,p));s('qp',st.qp)}
 function lsheet(){const q=st.q.trim();RES=search(q);
   const qk=BUILTIN.map((c,i)=>`<button class="cp" data-a="pickb" data-v="${i}">${c[0]}</button>`).join('');
@@ -319,7 +332,7 @@ let _sx=null;document.addEventListener('pointerdown',e=>{_sx=e.target.closest('#
 document.addEventListener('pointerup',e=>{if(_sx===null)return;const dx=e.clientX-_sx;_sx=null;if(Math.abs(dx)>70){qgo(st.qp+(dx>0?1:-1));qfill()}});
 addEventListener('resize',()=>fit());
 
-function day(date){const [la,lo]=POS(),c=new adhan.Coordinates(la,lo),pr=adhan.CalculationMethod[M[st.method]]();pr.madhab=st.asr==='h'?adhan.Madhab.Hanafi:adhan.Madhab.Shafi;try{pr.highLatitudeRule=adhan.HighLatitudeRule.recommended(c)}catch(e){}const p=new adhan.PrayerTimes(c,date,pr);return [['fajr','الفجر',p.fajr,1],['sunrise','الشروق',p.sunrise,0],['dhuhr','الظهر',p.dhuhr,1],['asr','العصر',p.asr,1],['maghrib','المغرب',p.maghrib,1],['isha','العشاء',p.isha,1]]}
+function day(date){const [la,lo]=POS(),c=new adhan.Coordinates(la,lo),pr=adhan.CalculationMethod[M[st.method]]();pr.madhab=st.asr==='h'?adhan.Madhab.Hanafi:adhan.Madhab.Shafi;try{pr.highLatitudeRule=adhan.HighLatitudeRule.recommended(c)}catch(e){}const p=new adhan.PrayerTimes(c,date,pr);return [['fajr','الفجر',p.fajr,1],['sunrise','الشروق',p.sunrise,0],['dhuhr',date.getDay()===5?'صلاة الجمعة':'الظهر',p.dhuhr,1,date.getDay()===5?'الجمعة':'الظهر'],['asr','العصر',p.asr,1],['maghrib','المغرب',p.maghrib,1],['isha','العشاء',p.isha,1]]}
 function calc(){const now=new Date(),t=day(civil(0)),all=[...day(civil(-1)),...t,...day(civil(1))].filter(x=>x[3]);return {now,t,nx:all.find(x=>x[2]>now),pv:[...all].reverse().find(x=>x[2]<=now)}}
 const hij=d=>new Intl.DateTimeFormat('ar-u-ca-islamic-umalqura-nu-latn',{day:'numeric',month:'long',year:'numeric',timeZone:TZ}).format(new Date(d.getTime()+st.hoff*864e5));
 const grg=d=>d.toLocaleDateString('ar-u-nu-latn',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:TZ});
@@ -338,11 +351,11 @@ function home(){const c=calc(),{now,nx,t}=c,ph=phase(c),f=t12;
   const ST=Array.from({length:26},(_,i)=>`<i style="left:${(i*37+11)%97}%;top:${(i*53+7)%46}%;animation-delay:${(i%7)*.4}s;opacity:${.4+(i%5)*.12}"></i>`).join('');
   const SKL='<svg class="skl" viewBox="0 0 400 90" preserveAspectRatio="none"><rect y="62" width="400" height="30" fill="rgba(3,16,14,.62)"/><path d="M0 90V62h28v-8l6-10 6 10v8h22V40l4-12 4 12v22h18V58q22-22 44 0v4h20V50l5-14 5 14v12h40V44l3-18 3 18v18h22V56q26-30 52 0v6h16V46l4-10 4 10v16h24V30l3-14 3 14v32h20V60q15-16 30 0v30z" fill="rgba(3,16,14,.62)"/></svg>';
   const acts=[['sub','qibla','القبلة','#e3f1e2','#2f8a45','<circle cx="12" cy="12" r="9"/><path d="M15.500 8.500l-2 5-5 2 2-5z"/>'],['tab','quran','وردك','#fdf0d8','#d98a1c','<path d="M3 5h7a2 2 0 012 2v13a2 2 0 00-2-2H3zM21 5h-7a2 2 0 00-2 2v13a2 2 0 012-2h7z"/>'],['tab','adhkar','الأذكار','#e8e5fb','#5b45c9','<path d="M12 3c3 4 5 6.500 5 9.500a5 5 0 01-10 0C7 9.500 9 7 12 3z"/>'],['sub','tasbih','المسبحة','#dff1ec','#1b7d68','<circle cx="12" cy="12" r="3"/><circle cx="12" cy="4.500" r="1.600"/><circle cx="12" cy="19.500" r="1.600"/><circle cx="4.500" cy="12" r="1.600"/><circle cx="19.500" cy="12" r="1.600"/>']];
-  return `${bar()}<div class="sk" data-ph="${ph}"><div class="stars">${ST}</div>${SKL}
-  <div class="dial2">${dial(c)}<div class="mid2"><span class="lb">الصلاة القادمة</span><span class="nm2">${nx[1]}</span><span class="cd" id="cd">--:--:--</span><span class="ad2">الأذان ${f(nx[2])}</span></div></div>
-  <div class="pr">${t.filter(x=>x[3]).map(x=>`<div class="${x[0]===nx[0]&&x[2].getTime()===nx[2].getTime()?'on':x[2]<now?'dn':''}"><b>${x[1]}</b><span>${f(x[2])}</span></div>`).join('')}</div></div>
+  return `${bar()}${dateHead()}<div class="sk" data-ph="${ph}"><div class="stars">${ST}</div>${SKL}
+  <div class="dial2">${dial(c)}<div class="mid2"><span class="lb">الصلاة القادمة</span><span class="nm2${nx[1].length>8?' lg':''}">${nx[1]}</span><span class="cd" id="cd">--:--:--</span><span class="ad2${nx[1]==='صلاة الجمعة'?' gold':''}">${nx[1]==='صلاة الجمعة'?'يوم الجمعة · ':'الأذان '}${f(nx[2])}</span></div></div>
+  <div class="pr">${t.filter(x=>x[3]).map(x=>`<div class="${x[0]===nx[0]&&x[2].getTime()===nx[2].getTime()?'on':x[2]<now?'dn':''}"><b>${x[4]||x[1]}</b><span>${f(x[2])}</span></div>`).join('')}</div></div>
   <div class="acts">${acts.map(a=>`<button class="act" style="--cc:${a[3]};--ic:${a[4]}" data-a="${a[0]}" data-v="${a[1]}"><span>${svg(a[5])}</span>${a[2]}</button>`).join('')}</div>
-  ${plist()}${rm()}${tracker()}${ayahCard()}${cr()}<div class="dt" style="margin-top:14px"><div><b>${hij(now)}</b><small>${grg(now)}</small></div><div class="dua2">رَبِّ زِدْنِي عِلْمًا<small style="text-align:left">طه ١١٤</small></div></div>`}
+  ${plist()}${rm()}${tracker()}${ayahCard()}${cr()}<div class="dt" style="margin-top:14px"><div><b>دعاء اليوم</b><small>من القرآن الكريم</small></div><div class="dua2">رَبِّ زِدْنِي عِلْمًا<small style="text-align:left">طه ١١٤</small></div></div>`}
 
 function kd(){const [la,lo]=POS(),r=Math.PI/180,dl=(39.8262-lo)*r,a=(21.4225-la)*r,h=Math.sin(a/2)**2+Math.cos(la*r)*Math.cos(21.4225*r)*Math.sin(dl/2)**2;return Math.round(12742*Math.asin(Math.sqrt(h)))}
 function qibla(){const [la,lo]=POS(),q=adhan.Qibla(new adhan.Coordinates(la,lo));let tk='',lb='';
@@ -385,13 +398,15 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!
 render();setInterval(tick,1000);document.addEventListener('input',e=>{if(e.target.id==='srch'){st.q=e.target.value;const p=e.target.selectionStart;render();const n=document.getElementById('srch');n.focus();n.setSelectionRange(p,p)}});
 if(st.mode==='auto')setTimeout(locate,300);notif();if(!NATIVE&&'serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});addEventListener('load',()=>{if(!document.getElementById('nav').innerHTML)render()});
 
-function plist(){const c=calc(),{t,nx}=c;return `<div class="sec"><b>مواقيت اليوم</b><span>${PN()}</span></div><div class="trk" style="padding:4px 18px">${t.map(x=>{const on=x[0]===nx[0]&&x[3]&&x[2].getTime()===nx[2].getTime();return `<div class="row2" style="${on?'color:var(--gold);font-weight:800':''}"><span>${x[1]}</span><span dir="ltr">${t12(x[2])}</span></div>`}).join('')}</div>`}
+function dateHead(){const now=new Date(),wd=new Intl.DateTimeFormat('ar',{weekday:'long',timeZone:TZ}).format(now),isF=civil(0).getDay()===5,gd=new Intl.DateTimeFormat('ar-u-nu-latn',{day:'numeric',month:'long',year:'numeric',timeZone:TZ}).format(now),gm=new Intl.DateTimeFormat('ar',{month:'short',timeZone:TZ}).format(now);
+  return `<div class="dh${isF?' fr':''}"><div class="db"><b>${parts(now).day}</b><small>${gm}</small></div><div class="dx"><div class="dw">${wd}${isF?`<i>${svg('M5 20V11')} جمعة مباركة</i>`:''}</div><div class="dg">${hij(now)}</div><div class="dm">${gd}</div></div></div>`}
+function plist(){const c=calc(),{t,nx}=c;return `<div class="sec"><b>مواقيت اليوم</b><span>${PN()}</span></div><div class="trk" style="padding:4px 18px">${t.map(x=>{const on=x[0]===nx[0]&&x[3]&&x[2].getTime()===nx[2].getTime();return `<div class="row2" style="${on?'color:var(--gold);font-weight:800':''}"><span>${x[1]}${x[1]==='صلاة الجمعة'?' ✦':''}</span><span dir="ltr">${t12(x[2])}</span></div>`}).join('')}</div>`}
 function rm(){const h=hU(cms(0)),T=day(civil(0)),fj=T[0][2],mg=T[4][2],now=new Date();
   if(h.month===9)return `<div class="rm"><span class="mi">${svg('M20 14.5A8')}</span><div><b>رمضان · اليوم ${h.day}</b><small>الإمساك ${t12(fj)} · الإفطار ${t12(mg)}${now<mg&&now>fj?' · بعد '+left(mg-now):''}</small></div></div>`;
   for(let i=1;i<=120;i++){const q=hU(cms(i));if(q.month===9&&q.day===1)return `<div class="rm"><span class="mi">${svg('M20 14.5A8')}</span><div><b>رمضان بعد ${i} ${i<11?'أيام':'يوماً'}</b><small>${grg(new Date(cms(i)))}</small></div></div>`}
   return ''}
 function tracker(){const r=trGet(0),wk=[];for(let i=6;i>=0;i--){const x=trGet(-i);wk.push(PL.every(p=>x[p[0]]))}
-  return `<div class="sec"><b>متابعة الصلوات</b><span>سلسلة ${streak()} يوم</span></div><div class="trk"><div class="rowp">${PL.map(p=>`<button class="pc ${r[p[0]]?'on':''}" data-a="trk" data-v="${p[0]}"><i>${svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>')}</i>${p[1]}</button>`).join('')}</div><div class="wk">${wk.map((d,i)=>`<i class="${d?'on':''}${i===6?' t':''}"></i>`).join('')}</div></div>`}
+  return `<div class="sec"><b>متابعة الصلوات</b><span>سلسلة ${streak()} يوم</span></div><div class="trk"><div class="rowp">${PL.map(p=>`<button class="pc ${r[p[0]]?'on':''}" data-a="trk" data-v="${p[0]}"><i>${svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>')}</i>${p[0]==='dhuhr'&&civil(0).getDay()===5?'الجمعة':p[1]}</button>`).join('')}</div><div class="wk">${wk.map((d,i)=>`<i class="${d?'on':''}${i===6?' t':''}"></i>`).join('')}</div></div>`}
 function ayahCard(){if(!V.length)return '';let i=Math.floor(cms(0)/864e5)*7%V.length,v=V[i],n=0;while(v.r.split(' ').length>22&&n<60){i=(i+1)%V.length;v=V[i];n++}
   return `<div class="sec"><b>آية اليوم</b><span>رواية حفص</span></div><button class="ayc" data-a="qgo" data-v="${v.p}"><div class="vr">${v.r}</div><small>${Q.chapters[v.s-1][1]} · آية ${arn(v.a)}</small></button>`}
 function cr(){if(!g('qp'))return '';const ch=Q?[...Q.chapters].filter(c=>c[3]<=st.qp).pop():null;
@@ -400,7 +415,7 @@ function hcal(){let s0=cms(0);for(let i=0;i<31&&hU(s0).day!==1;i++)s0-=864e5;
   for(let i=0;i<Math.abs(st.hm);i++){if(st.hm>0){let n=s0+864e5;while(hU(n).day!==1)n+=864e5;s0=n}else{let n=s0-864e5;while(hU(n).day!==1)n-=864e5;s0=n}}
   const m=hU(s0).month,days=[];for(let n=s0;hU(n).month===m&&days.length<31;n+=864e5)days.push(n);
   const lead=(new Date(s0).getUTCDay()+1)%7,td=cms(0),DN=['س','ح','ن','ث','ر','خ','ج'];
-  const cells=Array.from({length:lead},()=>'<div class="c e"></div>').join('')+days.map(n=>{const q=hU(n),e=EV[q.month+'-'+q.day],w=q.day>=13&&q.day<=15;return `<div class="c ${n===td?'td':''} ${e?'ev':''} ${w&&n!==td?'w':''}">${q.day}<small>${new Date(n).getUTCDate()}</small></div>`}).join('');
+  const cells=Array.from({length:lead},()=>'<div class="c e"></div>').join('')+days.map(n=>{const q=hU(n),e=EV[q.month+'-'+q.day],w=q.day>=13&&q.day<=15;return `<div class="c ${n===td?'td':''} ${e?'ev':''} ${w&&n!==td?'w':''} ${new Date(n).getUTCDay()===5&&n!==td?'fj':''}">${q.day}<small>${new Date(n).getUTCDate()}</small></div>`}).join('');
   const evs=days.map(n=>{const q=hU(n),e=EV[q.month+'-'+q.day];return e?`<div class="evr"><span class="no">${q.day}</span><div><b>${e}</b><small>${grg(new Date(n))}</small></div></div>`:''}).join('');
   const w=days.filter(n=>{const q=hU(n);return q.day===13});
   return `<div class="mh"><button data-a="hm" data-v="-1">›</button><b>${hmName(s0)}</b><button data-a="hm" data-v="1">‹</button></div><div class="cal">${DN.map(d=>`<div class="dn">${d}</div>`).join('')}${cells}</div>
@@ -421,8 +436,8 @@ function act2(a,v){
  return undefined}
 function times(){const c=calc(),{now}=c,dd=civil(st.doff),t=day(dd),nx=c.nx;let body='';
   const lbl=st.doff===0?'اليوم':st.doff===1?'غداً':st.doff===-1?'أمس':'';
-  if(st.seg==='d')body=`<div class="dnav"><button data-a="doff" data-v="-1">›</button><span>${lbl?lbl+' · ':''}${grg(new Date(Date.UTC(dd.getFullYear(),dd.getMonth(),dd.getDate(),12)))}</span><button data-a="doff" data-v="1">‹</button></div>`+t.map(x=>{const on=st.doff===0&&x[0]===nx[0]&&x[3]&&x[2].getTime()===nx[2].getTime(),q=IQ[x[0]],iq=q?new Date(x[2].getTime()+q*6e4):null,bo=st.pn[x[0]]!==false;
-    return `<div class="r ${on?'nx':''} ${x[3]?'':'ns'}"><span class="ic" style="background:linear-gradient(135deg,${GP[x[0]][0]},${GP[x[0]][1]});color:#fff;border:0;box-shadow:0 8px 16px -8px ${GP[x[0]][0]}">${svg(IC[x[0]])}</span><div class="n"><b>${x[1]}</b><small>${x[3]?(on?'بعد '+left(x[2]-now):''):'ليست صلاة'}</small></div><div class="t">${ft(x[2])}${iq?`<small>الإقامة ${t12(iq)}</small>`:''}</div>${x[3]?`<button class="bl ${bo?'on':''}" data-a="bell" data-v="${x[0]}" aria-label="تنبيه">${svg(bo?'M6 17h12':'M6 17h12M4 4')}</button>`:''}</div>`}).join('');
+  if(st.seg==='d')body=`<div class="dnav"><button data-a="doff" data-v="-1">›</button><span>${lbl?lbl+' · ':''}${grg(new Date(Date.UTC(dd.getFullYear(),dd.getMonth(),dd.getDate(),12)))}</span><button data-a="doff" data-v="1">‹</button></div>`+t.map(x=>{const on=st.doff===0&&x[0]===nx[0]&&x[3]&&x[2].getTime()===nx[2].getTime(),fr=x[1]==='صلاة الجمعة',gp=fr?['#1d6b52','#d9b45b']:GP[x[0]],q=IQ[x[0]],iq=q?new Date(x[2].getTime()+q*6e4):null,bo=st.pn[x[0]]!==false;
+    return `<div class="r ${on?'nx':''} ${x[3]?'':'ns'} ${fr?'fri':''}"><span class="ic" style="background:linear-gradient(135deg,${gp[0]},${gp[1]});color:#fff;border:0;box-shadow:0 8px 16px -8px ${gp[0]}">${svg(fr?'M5 20V11':IC[x[0]])}</span><div class="n"><b>${x[1]}</b><small>${x[3]?(on?'بعد '+left(x[2]-now):(fr?'يوم الجمعة المبارك':'')):'ليست صلاة'}</small></div><div class="t">${ft(x[2])}${iq?`<small>الإقامة ${t12(iq)}</small>`:''}</div>${x[3]?`<button class="bl ${bo?'on':''}" data-a="bell" data-v="${x[0]}" aria-label="تنبيه">${svg(bo?'M6 17h12':'M6 17h12M4 4')}</button>`:''}</div>`}).join('');
   else if(st.seg==='m'){let rows='';for(let i=0;i<30;i++){const d=civil(i),r=day(d),f=x=>t12(x).replace(/ [صم]$/,'');rows+=`<tr class="${i?'':'t0'}"><td>${d.getDate()}/${d.getMonth()+1}</td>${[0,2,3,4,5].map(k=>`<td>${f(r[k][2])}</td>`).join('')}</tr>`}
     body=`<table><tr><th>اليوم</th><th>الفجر</th><th>الظهر</th><th>العصر</th><th>المغرب</th><th>العشاء</th></tr>${rows}</table>`}
   else body=hcal();
